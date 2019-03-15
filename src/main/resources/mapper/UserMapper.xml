@@ -5,6 +5,7 @@
     <id column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="user_password" jdbcType="CHAR" property="userPassword" />
+    <result column="salt" jdbcType="CHAR" property="salt" />
     <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
     <result column="user_phone" jdbcType="CHAR" property="userPhone" />
     <result column="user_gold" jdbcType="INTEGER" property="userGold" />

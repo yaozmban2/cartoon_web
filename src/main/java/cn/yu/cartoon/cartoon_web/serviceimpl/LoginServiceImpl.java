@@ -5,6 +5,7 @@ import cn.yu.cartoon.cartoon_web.pojo.dto.User;
 import cn.yu.cartoon.cartoon_web.service.LoginService;
 import cn.yu.cartoon.cartoon_web.util.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -13,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
  * @version 1.0
  * @date 2019/2/8 23:02
  **/
+@Service(value = "loginService")
 public class LoginServiceImpl implements LoginService {
 
     @Autowired

@@ -134,9 +134,11 @@ public class RegisterServiceImpl implements RegisterService {
         if (registerInfoNoProblem != checkRegisterInfo(user, validatePassword)) {
             return checkRegisterInfo(user, validatePassword);
         }
+        String salt = RandomUtils.randomString(8);
+        user.setSalt(salt);
         //设置用户密码加密
         try {
-            user.setUserPassword(Encryption.md5(user.getUserPassword()));
+            user.setUserPassword(Encryption.md5(user.getUserPassword() + salt));
         } catch (NoSuchAlgorithmException e) {
             logger.warn("line:133 ，没有md5算法", e);
             return 7;

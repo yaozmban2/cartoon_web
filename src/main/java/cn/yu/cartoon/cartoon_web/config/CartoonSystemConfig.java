@@ -38,6 +38,9 @@ public class CartoonSystemConfig {
      */
     private int listenPayInfoPort;
 
+    private String publicKeyFileName;
+    private String privateKeyFileName;
+
     private static class CartoonSystemConfigHolder {
         private static CartoonSystemConfig cartoonSystemConfig = new CartoonSystemConfig();
 
@@ -45,9 +48,11 @@ public class CartoonSystemConfig {
             InputStream inputStream = null;
             try {
                 //classpath:为resource文件夹
-                inputStream = new BufferedInputStream(new FileInputStream(ResourceUtils.getFile("classpath:properties/cartoonSystemConfig.properties")));
+                inputStream = new BufferedInputStream(new FileInputStream(ResourceUtils.getFile("classpath:application.properties")));
                 Properties p = new Properties();
                 p.load(inputStream);
+                cartoonSystemConfig.publicKeyFileName = p.getProperty("RSA.publicKey");
+                cartoonSystemConfig.privateKeyFileName = p.getProperty("RSA.privateKey");
                 cartoonSystemConfig.vipPrice = Integer.valueOf(p.getProperty("vipPrice"));
                 cartoonSystemConfig.goldCoinPrice = Integer.valueOf(p.getProperty("goldCoinPrice"));
                 cartoonSystemConfig.pictureSitePath = p.getProperty("pictureSitePath");
@@ -82,5 +87,13 @@ public class CartoonSystemConfig {
 
     public int getListenPayInfoPort() {
         return listenPayInfoPort;
+    }
+
+    public String getPublicKeyFileName() {
+        return publicKeyFileName;
+    }
+
+    public String getPrivateKeyFileName() {
+        return privateKeyFileName;
     }
 }

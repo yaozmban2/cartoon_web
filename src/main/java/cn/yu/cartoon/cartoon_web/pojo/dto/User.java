@@ -10,6 +10,8 @@ public class User {
 
     private String userPassword;
 
+    private String salt;
+
     private String userEmail;
 
     private String userPhone;
@@ -52,6 +54,14 @@ public class User {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getUserEmail() {
