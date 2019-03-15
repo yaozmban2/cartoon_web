@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yu.cartoon.cartoon_web.mapper.CartoonTypeMapper">
+    <resultMap id="BaseResultMap" type="cn.yu.cartoon.cartoon_web.pojo.dto.CartoonType" >
+        <id column="type_id" jdbcType="INTEGER" property="typeId" />
+        <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+        <result column="img_uri" jdbcType="VARCHAR" property="imgUri" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from cartoon_type;
+    </select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yu.cartoon.cartoon_web.mapper.CountryMapper">
+    <resultMap id="BaseResultMap" type="cn.yu.cartoon.cartoon_web.pojo.dto.Country" >
+        <id column="country_id" jdbcType="INTEGER" property="countryId" />
+        <result column="country_name" jdbcType="VARCHAR" property="countryName" />
+        <result column="img_uri" jdbcType="VARCHAR" property="imgUri" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from country;
+    </select>
+
+</mapper>

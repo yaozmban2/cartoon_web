@@ -1,11 +1,19 @@
 package cn.yu.cartoon.cartoon_web.controller;
 
+import cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon;
+import cn.yu.cartoon.cartoon_web.pojo.dto.CartoonType;
+import cn.yu.cartoon.cartoon_web.pojo.dto.Country;
+import cn.yu.cartoon.cartoon_web.service.CartoonTypeService;
+import cn.yu.cartoon.cartoon_web.service.CountryService;
 import cn.yu.cartoon.cartoon_web.util.FilesUtils;
 import cn.yu.cartoon.cartoon_web.util.ZipUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 漫画相关操作
@@ -22,10 +32,35 @@ import java.io.IOException;
  * @date 2019/2/14 11:01
  **/
 
-@RequestMapping("/cartoon")
+@Controller
 public class CartoonController {
 
     private static Logger logger = LoggerFactory.getLogger(CartoonController.class);
+
+    private final CountryService countryService;
+    private final CartoonTypeService cartoonTypeService;
+
+    @Autowired
+    public CartoonController(CountryService countryService, CartoonTypeService cartoonTypeService) {
+        this.countryService = countryService;
+        this.cartoonTypeService = cartoonTypeService;
+    }
+
+    @GetMapping("/manager/upload")
+    public String forwardUpload(Integer cartoonId, Model model) {
+
+        if (null == cartoonId || cartoonId < 0) {
+            Cartoon cartoon = new Cartoon();
+            model.addAttribute("cartoon", cartoon);
+        }
+        List<Country> countryList = countryService.getAllCountryName();
+        model.addAttribute("countryList", countryList);
+
+        List<CartoonType> typeList = cartoonTypeService.getAllCartoonType();
+        model.addAttribute("typeList", typeList);
+
+        return "/item/cartoonEdit";
+    }
 
     @ResponseBody
     @PostMapping("/upload")

@@ -17,11 +17,17 @@ public class Cartoon {
 
     private Byte cartoonCountry;
 
-    private Byte cartoonType;
+    private String cartoonDescription;
 
     private String cartoonUri;
 
     private Date cartoonUploadTime;
+
+    private Byte isDeleted;
+
+    private Integer collectCount;
+
+    private Integer readCount;
 
     public Integer getCartoonId() {
         return cartoonId;
@@ -55,14 +61,6 @@ public class Cartoon {
         this.cartoonCountry = cartoonCountry;
     }
 
-    public Byte getCartoonType() {
-        return cartoonType;
-    }
-
-    public void setCartoonType(Byte cartoonType) {
-        this.cartoonType = cartoonType;
-    }
-
     public String getCartoonUri() {
         return cartoonUri;
     }
@@ -77,5 +75,53 @@ public class Cartoon {
 
     public void setCartoonUploadTime(Date cartoonUploadTime) {
         this.cartoonUploadTime = cartoonUploadTime;
+    }
+
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getCartoonDescription() {
+        return cartoonDescription;
+    }
+
+    public void setCartoonDescription(String cartoonDescription) {
+        this.cartoonDescription = cartoonDescription;
+    }
+
+    public Integer getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
+    }
+
+    public Integer getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Cartoon{" +
+                "cartoonId=" + cartoonId +
+                ", cartoonName='" + cartoonName + '\'' +
+                ", cartoonAuthor='" + cartoonAuthor + '\'' +
+                ", cartoonCountry=" + cartoonCountry +
+                ", cartoonDescription='" + cartoonDescription + '\'' +
+                ", cartoonUri='" + cartoonUri + '\'' +
+                ", cartoonUploadTime=" + cartoonUploadTime +
+                ", isDeleted=" + isDeleted +
+                ", collectCount=" + collectCount +
+                ", readCount=" + readCount +
+                '}';
     }
 }
