@@ -24,4 +24,14 @@ public interface CountryMapper {
      **/
     List<Country> selectAll();
 
+    /**
+     *  根据国家id查询国家信息
+     *
+     * @author Yu
+     * @date 15:12 2019/3/16
+     * @param countryId 国家id
+     * @return Country 国家信息
+     **/
+    Country selectByCountryId(Integer countryId);
+
 }

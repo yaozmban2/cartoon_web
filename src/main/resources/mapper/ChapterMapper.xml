@@ -3,12 +3,13 @@
 <mapper namespace="cn.yu.cartoon.cartoon_web.mapper.ChapterMapper">
     <resultMap id="BaseResultMap" type="cn.yu.cartoon.cartoon_web.pojo.dto.Chapter" >
         <id column="chapter_id" jdbcType="INTEGER" property="chapterId" />
+        <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
         <result column="chapter_name" jdbcType="VARCHAR" property="chapterName" />
-        <result column="chapter_upload_time" jdbcType="TIMESTAMP" property="chapterUploadTime" />
+        <result column="chapter_update_time" jdbcType="TIMESTAMP" property="chapterUpdateTime" />
         <result column="cartoon_id" jdbcType="INTEGER" property="cartoonId" />
         <result column="chapter_price" jdbcType="INTEGER" property="chapterPrice" />
         <result column="chapter_uri" jdbcType="VARCHAR" property="chapterUri" />
-        <result column="chapter_num" jdbcType="INTEGER" property="chapterNum" />
+        <result column="chapter_page_count" jdbcType="INTEGER" property="chapterPageCount" />
     </resultMap>
 
     <select id="selectCountByUri" parameterType="String" resultType="Integer" >
@@ -21,17 +22,32 @@
         SELECT * FROM chapter WHERE chapter_uri = #{chapterUri}
     </select>
 
+    <select id="selectChaptersByCartoonId" parameterType="Integer" resultMap="BaseResultMap">
+        SELECT * FROM chapter where cartoon_id = #{cartoonId} ORDER BY sort_num ASC
+    </select>
+
+    <select id="selectChaptersByCartoonIdByPage" parameterType="Map" resultMap="BaseResultMap">
+        SELECT * FROM chapter WHERE cartoon_id = #{cartoonId} ORDER BY sort_num ASC limit #{index}, #{size}
+    </select>
+
+    <select id="selectChapterCountByCartoonId" parameterType="Integer" resultType="Integer">
+        SELECT count(*) FROM chapter WHERE cartoon_id = #{cartoonId}
+    </select>
+
     <insert id="insert" parameterType="Chapter" >
         INSERT INTO chapter
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="chapterId != null">
                 chapter_id,
             </if>
+            <if test="sortNum != null">
+                sort_num;
+            </if>
             <if test="chapterName != null" >
                 chapter_name,
             </if>
-            <if test="chapterUploadTime != null" >
-                chapter_upload_time,
+            <if test="chapterUpdateTime != null" >
+                chapter_update_time,
             </if>
             <if test="cartoonId != null" >
                 cartoon_id,
@@ -42,19 +58,22 @@
             <if test="chapterUri != null" >
                 chapter_uri,
             </if>
-            <if test="chapterNum != null">
-                chapter_num,
+            <if test="chapterPageCount != null">
+                chapter_page_count,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="chapterId != null">
                 #{chapterId},
             </if>
+            <if test="sortNum != null">
+                #{sortNum};
+            </if>
             <if test="chapterName != null" >
                 #{chapterName},
             </if>
-            <if test="chapterUploadTime != null" >
-                #{chapterUploadTime},
+            <if test="chapterUpdateTime != null" >
+                #{chapterUpdateTime},
             </if>
             <if test="cartoonId != null" >
                 #{cartoonId},
@@ -65,8 +84,8 @@
             <if test="chapterUri != null" >
                 #{chapterUri},
             </if>
-            <if test="chapterNum != null">
-                #{chapterNum},
+            <if test="chapterPageCount != null">
+                #{chapterPageCount},
             </if>
         </trim>
     </insert>

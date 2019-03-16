@@ -17,8 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Yu
@@ -49,7 +48,7 @@ public class ChapterServiceImpl implements ChapterService {
 
         //计算章节页数
         File sourceFile = new File(chapterFilePath);
-        chapter.setChapterNum(Objects.requireNonNull(sourceFile.listFiles()).length);
+        chapter.setChapterPageCount(Objects.requireNonNull(sourceFile.listFiles()).length);
         //生成章节目录名
         String dirUri = RandomUtils.randomString(8);
         while (uriIsExit(dirUri)) {
@@ -117,6 +116,33 @@ public class ChapterServiceImpl implements ChapterService {
             }
         }
         return chapter;
+    }
+
+    @Override
+    public List<Chapter> getChaptersByCartoonIdByPage(Integer cartoonId, Integer page, Integer size) {
+
+        List<Chapter> chapterList = chapterRedisDao.selectChaptersByCartoonId(cartoonId, page, size);
+        if (null != chapterList) {
+            return chapterList;
+        }
+
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("cartoonId", cartoonId);
+        map.put("index", (page - 1) * size);
+        map.put("size", size);
+        chapterList = chapterMapper.selectChaptersByCartoonIdByPage(map);
+
+        if (0 == chapterList.size()) {
+            return null;
+        }
+        chapterRedisDao.insertChaptersByCartoonId(cartoonId, chapterList, page, size);
+
+        return chapterList;
+    }
+
+    @Override
+    public Integer getChapterCountByCartoonId(Integer cartoonId) {
+        return chapterMapper.selectChapterCountByCartoonId(cartoonId);
     }
 
 }

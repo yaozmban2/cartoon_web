@@ -104,6 +104,28 @@
 
                                 <div class="hr-line-dashed"></div>
 
+                                <div class="form-group"><label class="col-sm-2 control-label">是否在连载：</label>
+                                    <div class="col-sm-10">
+                                        <select name="isEnd" id="isEnd" class="form-control" >
+                                            <option value="0">连载</option>
+                                            <option value="1">完结</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group"><label class="col-sm-2 control-label">是否18禁：</label>
+                                    <div class="col-sm-10">
+                                        <select name="isAdult" id="isAdult" class="form-control" >
+                                            <option value="0">全年龄段</option>
+                                            <option value="1">18禁</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="hr-line-dashed"></div>
+
                                 <div id="imageCell" class="form-group"><label class="col-sm-2 control-label">图片：</label>
                                     <div class="col-sm-10">
                                         <img th:src="@{'/'+${cartoon.cartoonUri}}" height="250px" width="200px" />

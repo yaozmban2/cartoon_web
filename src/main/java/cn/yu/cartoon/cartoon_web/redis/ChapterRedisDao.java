@@ -1,16 +1,17 @@
 package cn.yu.cartoon.cartoon_web.redis;
 
 import cn.yu.cartoon.cartoon_web.pojo.dto.Chapter;
+import cn.yu.cartoon.cartoon_web.util.JacksonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Array;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class ChapterRedisDao {
 
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     /**
      * 默认过期时长，单位：秒
@@ -36,7 +37,7 @@ public class ChapterRedisDao {
     public static final long NOT_EXPIRE = -1;
 
     @Autowired
-    public ChapterRedisDao(RedisTemplate redisTemplate) {
+    public ChapterRedisDao(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -99,11 +100,11 @@ public class ChapterRedisDao {
         //设置记录各字段的值
         Map<String, String> tempMap = new HashMap<>(6);
         tempMap.put("chapterName", chapter.getChapterName());
-        tempMap.put("chapterUploadTime", String.valueOf(chapter.getChapterUploadTime()));
+        tempMap.put("chapterUploadTime", String.valueOf(chapter.getChapterUpdateTime()));
         tempMap.put("cartoonId", String.valueOf(chapter.getCartoonId()));
         tempMap.put("chapterPrice", String.valueOf(chapter.getChapterPrice()));
         tempMap.put("chapterUri", chapter.getChapterUri());
-        tempMap.put("chapterNum", String.valueOf(chapter.getChapterNum()));
+        tempMap.put("chapterNum", String.valueOf(chapter.getChapterPageCount()));
         redisTemplate.opsForHash().putAll(recordH, tempMap);
 
     }
@@ -123,7 +124,7 @@ public class ChapterRedisDao {
         String recordName = "chapter:{0}";
         String recordH = MessageFormat.format(recordName, String.valueOf(id));
         //获取记录数据
-        Map<String, String> tempMap = redisTemplate.opsForHash().entries(recordH);
+        Map tempMap = redisTemplate.opsForHash().entries(recordH);
         //如果redis中没数据则返回
         if (0 == tempMap.size()) {
             return null;
@@ -135,12 +136,64 @@ public class ChapterRedisDao {
             return chapter;
         }
         chapter.setChapterId(id);
-        chapter.setChapterName(tempMap.get("chapterName"));
-        chapter.setChapterUploadTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK).parse(tempMap.get("chapterUploadTime")));
-        chapter.setCartoonId(Integer.valueOf(tempMap.get("cartoonId")));
-        chapter.setChapterPrice(Integer.valueOf(tempMap.get("chapterPrice")));
-        chapter.setChapterUri(tempMap.get("chapterUri"));
-        chapter.setChapterNum(Integer.valueOf(tempMap.get("chapterNum")));
+        chapter.setChapterName((String) tempMap.get("chapterName"));
+        chapter.setChapterUpdateTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK).parse((String) tempMap.get("chapterUploadTime")));
+        chapter.setCartoonId(Integer.valueOf((String) tempMap.get("cartoonId")));
+        chapter.setChapterPrice(Integer.valueOf((String) tempMap.get("chapterPrice")));
+        chapter.setChapterUri((String) tempMap.get("chapterUri"));
+        chapter.setChapterPageCount(Integer.valueOf((String) tempMap.get("chapterNum")));
         return chapter;
+    }
+
+    /**
+     *  将漫画的章节信息存入redis缓存
+     *      1.使用jackson将章节信息序列化成json字符串
+     *      2.将章节依此插入到redis的List中
+     *      key: chaptersByCartoonId:#{cartoonId}:#{page}:#{size}
+     *
+     * @author Yu
+     * @date 18:03 2019/3/16
+     * @param cartoonId 漫画的id
+     * @param chapterList 漫画的所有章节信息
+     **/
+    public void insertChaptersByCartoonId(Integer cartoonId, List<Chapter> chapterList, Integer page, Integer size) {
+
+        String key = "chaptersByCartoonId:{0}:{1}:{2}";
+        key = MessageFormat.format(key, String.valueOf(cartoonId), String.valueOf(page), String.valueOf(size));
+
+        for (Chapter chapter: chapterList) {
+            String chapterString = JacksonUtil.toJSon(chapter);
+            redisTemplate.opsForList().rightPush(key, chapterString);
+        }
+    }
+
+    /**
+     *  根据漫画id分页查找缓存中存储的章节数据
+     *      1.生成key去缓存中找到List数据
+     *      2.使用jackson将存储的章节信息json串反序列化为对象
+     *      key: chaptersByCartoonId:#{cartoonId}:#{page}:#{size}
+     *
+     * @author Yu
+     * @date 18:06 2019/3/16
+     * @param cartoonId 漫画章节
+     * @param page 第几分页
+     * @param size 分页大小
+     * @return 如果找不到数据 则返回null
+     **/
+    public List<Chapter> selectChaptersByCartoonId(Integer cartoonId,Integer page, Integer size) {
+
+        String key = "chaptersByCartoonId:{0}:{1}:{2}";
+        key = MessageFormat.format(key, String.valueOf(cartoonId), String.valueOf(page), String.valueOf(size));
+
+        List<String> chapterStrList = redisTemplate.opsForList().range(key, 0, -1);
+        if (0 == chapterStrList.size()) {
+            return null;
+        }
+        List<Chapter> chapterList = new ArrayList<>();
+        for (String chapterStr:chapterStrList) {
+            chapterList.add(JacksonUtil.readValue(chapterStr, Chapter.class));
+        }
+
+        return chapterList;
     }
 }

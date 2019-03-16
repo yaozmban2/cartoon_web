@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * ftp的工具类
@@ -135,7 +136,7 @@ public class FtpUtil {
                         continue;
                     }
                     tempPathBuild.append(dir).append("/");
-                    String tempPath = new String(tempPathBuild.toString().getBytes("UTF-8"), "iso-8859-1");
+                    String tempPath = new String(tempPathBuild.toString().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 
                     if (!ftpClient.changeWorkingDirectory(tempPath)) {
                         if (!ftpClient.makeDirectory(tempPath)) {
@@ -147,7 +148,7 @@ public class FtpUtil {
                 }
             }
             input = new FileInputStream(sourceFile);
-            remoteFilePath = new String(remoteFilePath.getBytes("UTF-8"),"iso-8859-1");
+            remoteFilePath = new String(remoteFilePath.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
             //上传文件
             if (!ftpClient.storeFile(remoteFilePath, input)) {
                 logger.warn("上传文件失败！");

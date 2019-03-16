@@ -13,13 +13,13 @@ public class Cartoon {
 
     private String cartoonName;
 
+    private String cartoonUri;
+
     private String cartoonAuthor;
 
     private Byte cartoonCountry;
 
     private String cartoonDescription;
-
-    private String cartoonUri;
 
     private Date cartoonUpdateTime;
 
@@ -28,6 +28,10 @@ public class Cartoon {
     private Integer collectCount;
 
     private Integer readCount;
+
+    private Byte isEnd;
+
+    private Byte isAdult;
 
     public Integer getCartoonId() {
         return cartoonId;
@@ -109,6 +113,22 @@ public class Cartoon {
         this.readCount = readCount;
     }
 
+    public Byte getIsEnd() {
+        return isEnd;
+    }
+
+    public void setIsEnd(Byte isEnd) {
+        this.isEnd = isEnd;
+    }
+
+    public Byte getIsAdult() {
+        return isAdult;
+    }
+
+    public void setIsAdult(Byte isAdult) {
+        this.isAdult = isAdult;
+    }
+
     @Override
     public String toString() {
         return "Cartoon{" +
@@ -122,6 +142,8 @@ public class Cartoon {
                 ", isDeleted=" + isDeleted +
                 ", collectCount=" + collectCount +
                 ", readCount=" + readCount +
+                ", isEnd=" + isEnd +
+                ", isAdult=" + isAdult +
                 '}';
     }
 }

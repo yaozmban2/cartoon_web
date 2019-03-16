@@ -96,7 +96,7 @@ public class ChapterController {
         chapter.setCartoonId(2);
         chapter.setChapterName(chapterName);
         chapter.setChapterPrice(50);
-        chapter.setChapterUploadTime(new Date());
+        chapter.setChapterUpdateTime(new Date());
 
         Chapter returnChapter = null;
         //将zip章节数据存入数据库，章节漫画存入图片服务器

@@ -4,6 +4,7 @@ import cn.yu.cartoon.cartoon_web.pojo.dto.Chapter;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author Yu
@@ -67,4 +68,27 @@ public interface ChapterService {
      **/
     Chapter getChapterById(int id) throws ParseException;
 
+    /**
+     *  根据漫画ID获得所有章节信息
+     *      1.查询redis中是否有该分页数据
+     *      2.若没有则去mysql中查找
+     *      3.将查到的数据放入redis缓存并当作结果返回
+     *
+     * @author Yu
+     * @date 19:39 2019/3/16
+     * @param cartoonId 漫画ID
+     * @param page 第几页
+     * @param size 分页大小
+     * @return 如果没有数据返回null
+     **/
+    List<Chapter> getChaptersByCartoonIdByPage(Integer cartoonId, Integer page, Integer size);
+
+    /**
+     *  根据漫画id查询漫画的章节总数
+     *
+     * @author Yu
+     * @date 21:05 2019/3/16
+     * @param cartoonId 漫画id
+     **/
+    Integer getChapterCountByCartoonId(Integer cartoonId);
 }

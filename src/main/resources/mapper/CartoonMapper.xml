@@ -12,7 +12,13 @@
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
         <result column="collect_count" jdbcType="INTEGER" property="collectCount" />
         <result column="read_count" jdbcType="INTEGER" property="readCount" />
+        <result column="is_end" jdbcType="TINYINT" property="isEnd" />
+        <result column="is_adult" jdbcType="TINYINT" property="isAdult" />
     </resultMap>
+
+    <select id="selectById" parameterType="Integer" resultMap="BaseResultMap">
+        select * from cartoon where cartoon_id = #{cartoonId}
+    </select>
 
     <insert id="insertAndGetId" useGeneratedKeys="true" keyProperty="cartoonId" parameterType="cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon">
         INSERT into cartoon
@@ -47,6 +53,12 @@
             <if test="readCount != null">
                 read_count,
             </if>
+            <if test="isEnd != null">
+                is_end,
+            </if>
+            <if test="isAdult != null">
+                is_adult,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="cartoonId != null">
@@ -78,6 +90,12 @@
             </if>
             <if test="readCount != null">
                 #{readCount},
+            </if>
+            <if test="isEnd != null">
+                #{isEnd},
+            </if>
+            <if test="isAdult != null">
+                #{isAdult},
             </if>
         </trim>
     </insert>

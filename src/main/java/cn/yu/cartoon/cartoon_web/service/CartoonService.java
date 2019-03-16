@@ -1,6 +1,8 @@
 package cn.yu.cartoon.cartoon_web.service;
 
 import cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon;
+import cn.yu.cartoon.cartoon_web.pojo.vo.cartoonvo.CartoonInfoVo;
+import io.swagger.models.auth.In;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,4 +40,17 @@ public interface CartoonService {
      * @param multipartFile 封面图片文件
      **/
     void uploadFrontCoverToImgServer(Cartoon cartoon, MultipartFile multipartFile) throws IOException;
+
+    /**
+     *  根据漫画Id查询得到漫画的相关信息
+     *      1.先去redis中查询
+     *      2.如果没有再去Mysql中查询 cartoon和cartoonCountry对应的countryName  放到cartoonInfoVo中
+     *      3.将该数据放到redis中
+     *
+     * @author Yu
+     * @date 14:48 2019/3/16
+     * @param cartoonId 漫画ID
+     * @return CartoonInfoVo 相对于cartoon多了一个countryName
+     **/
+    CartoonInfoVo selectCartoonById(Integer cartoonId);
 }

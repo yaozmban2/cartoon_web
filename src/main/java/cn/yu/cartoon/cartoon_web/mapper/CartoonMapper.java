@@ -22,4 +22,6 @@ public interface CartoonMapper {
      **/
     Integer insertAndGetId(Cartoon cartoon);
 
+    Cartoon selectById(Integer cartoonId);
+
 }
