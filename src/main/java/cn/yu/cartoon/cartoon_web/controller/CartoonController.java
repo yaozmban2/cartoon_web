@@ -3,6 +3,7 @@ package cn.yu.cartoon.cartoon_web.controller;
 import cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon;
 import cn.yu.cartoon.cartoon_web.pojo.dto.CartoonType;
 import cn.yu.cartoon.cartoon_web.pojo.dto.Country;
+import cn.yu.cartoon.cartoon_web.service.CartoonService;
 import cn.yu.cartoon.cartoon_web.service.CartoonTypeService;
 import cn.yu.cartoon.cartoon_web.service.CountryService;
 import cn.yu.cartoon.cartoon_web.util.FilesUtils;
@@ -39,13 +40,23 @@ public class CartoonController {
 
     private final CountryService countryService;
     private final CartoonTypeService cartoonTypeService;
+    private final CartoonService cartoonService;
 
     @Autowired
-    public CartoonController(CountryService countryService, CartoonTypeService cartoonTypeService) {
+    public CartoonController(CountryService countryService, CartoonTypeService cartoonTypeService, CartoonService cartoonService) {
         this.countryService = countryService;
         this.cartoonTypeService = cartoonTypeService;
+        this.cartoonService = cartoonService;
     }
 
+    /**
+     * 跳转到漫画信息修改页面（若是没有带上漫画ID 则为添加漫画）
+     *
+     * @author Yu
+     * @date 21:00 2019/3/15
+     * @param cartoonId 漫画id
+     * @return 转到漫画修改页面
+     **/
     @GetMapping("/manager/upload")
     public String forwardUpload(Integer cartoonId, Model model) {
 
@@ -63,35 +74,18 @@ public class CartoonController {
     }
 
     @ResponseBody
-    @PostMapping("/upload")
-    public String uploadCartoon(@RequestParam("zip") MultipartFile zip, HttpServletRequest request){
+    @PostMapping("/manager/upload")
+    public String uploadCartoon(Cartoon cartoon, @RequestParam(value = "type[]") Integer[] types,
+                                @RequestParam(value = "image") MultipartFile multipartFile){
 
-        //如果传入的数据是空
-        if (null == zip || zip.isEmpty()) {
-            return "传入的数据为空";
-        }
-
-        //将MultipartFile转为File
-        String fileURI = null;
         try {
-            fileURI = FilesUtils.multifile2file(zip, "sdasda");
+            cartoonService.createCartoon(cartoon, types, multipartFile);
+            return "上传成功";
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
-            return "服务器出了点小问题";
-        }
-        if (null == fileURI) {
-            return "服务器出了点小问题";
-        }
-        File zipFile = new File(fileURI);
-        try {
-            if (!ZipUtils.isArchiveFile(zipFile)) {
-                return "不是zip文件";
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            return "服务器出了点小问题";
+            return "服务器出错";
         }
 
-        return "是zip文件";
+
     }
 }

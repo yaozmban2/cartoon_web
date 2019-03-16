@@ -21,21 +21,26 @@ public class CartoonFtpConfig {
 
     private static Logger logger = LoggerFactory.getLogger(CartoonFtpConfig.class);
 
-    public static String host;
+    private static String host;
 
-    public static Integer port;
+    private static Integer port;
 
-    public static String userName;
+    private static String userName;
 
-    public static String password;
+    private static String password;
 
-    public static String basePath;
+    private static String basePath;
 
-    public static String cartoonUrl;
+    /**
+     * 漫画服务器的基础地址
+     */
+    private static String cartoonUrl;
+
+    private static String cartoonFrontCoverImaName = "frontCover.png";
 
     static {
         try {
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(ResourceUtils.getFile("classpath:properties/cartoonFtp.properties")));
+            InputStream inputStream = new BufferedInputStream(new FileInputStream(ResourceUtils.getFile("classpath:application.properties")));
             Properties p = new Properties();
             p.load(inputStream);
             host = p.getProperty("FTP.ADDRESS");
@@ -47,5 +52,37 @@ public class CartoonFtpConfig {
         } catch (IOException e) {
             logger.error("读取配置文件失败", e);
         }
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+    public static Integer getPort() {
+        return port;
+    }
+
+    public static String getUserName() {
+        return userName;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static String getBasePath() {
+        return basePath;
+    }
+
+    public static String getCartoonUrl() {
+        return cartoonUrl;
+    }
+
+    public static String getCartoonFrontCoverImaName() {
+        return cartoonFrontCoverImaName;
     }
 }

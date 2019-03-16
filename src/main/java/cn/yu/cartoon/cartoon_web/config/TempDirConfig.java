@@ -1,5 +1,12 @@
 package cn.yu.cartoon.cartoon_web.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
 /**
  * 存放一些临时文件路径的类
  *
@@ -9,13 +16,24 @@ package cn.yu.cartoon.cartoon_web.config;
  **/
 public class TempDirConfig {
 
+    private static Logger logger = LoggerFactory.getLogger(TempDirConfig.class);
+
     private static String tempZipDirPath;
 
     private static String tempDecompressDirPath;
 
     static {
-        String relativelyPath = System.getProperty("rootPath") ;
-        tempZipDirPath = relativelyPath + "temZipDir";
+        File path = null;
+        try {
+            path = new File(ResourceUtils.getURL("classpath:").getPath());
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage(), e);
+        }
+        if(!path.exists()){
+            path = new File("");
+        }
+        String relativelyPath = path.getAbsolutePath();
+        tempZipDirPath = relativelyPath + File.separator + "temZipDir";
         tempDecompressDirPath = relativelyPath + "temDepressDir";
     }
 

@@ -21,7 +21,7 @@ public class Cartoon {
 
     private String cartoonUri;
 
-    private Date cartoonUploadTime;
+    private Date cartoonUpdateTime;
 
     private Byte isDeleted;
 
@@ -69,12 +69,12 @@ public class Cartoon {
         this.cartoonUri = cartoonUri;
     }
 
-    public Date getCartoonUploadTime() {
-        return cartoonUploadTime;
+    public Date getCartoonUpdateTime() {
+        return cartoonUpdateTime;
     }
 
-    public void setCartoonUploadTime(Date cartoonUploadTime) {
-        this.cartoonUploadTime = cartoonUploadTime;
+    public void setCartoonUpdateTime(Date cartoonUpdateTime) {
+        this.cartoonUpdateTime = cartoonUpdateTime;
     }
 
     public Byte getIsDeleted() {
@@ -118,7 +118,7 @@ public class Cartoon {
                 ", cartoonCountry=" + cartoonCountry +
                 ", cartoonDescription='" + cartoonDescription + '\'' +
                 ", cartoonUri='" + cartoonUri + '\'' +
-                ", cartoonUploadTime=" + cartoonUploadTime +
+                ", cartoonUpdateTime=" + cartoonUpdateTime +
                 ", isDeleted=" + isDeleted +
                 ", collectCount=" + collectCount +
                 ", readCount=" + readCount +

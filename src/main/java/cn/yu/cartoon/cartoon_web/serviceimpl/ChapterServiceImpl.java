@@ -58,7 +58,7 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setChapterUri(dirUri);
 
         //如果上传成功，则将相关的信息存入数据库
-        if (FtpUtil.upload(CartoonFtpConfig.host, CartoonFtpConfig.port, CartoonFtpConfig.userName, CartoonFtpConfig.password, chapterFilePath, CartoonFtpConfig.basePath, dirUri, true)) {
+        if (FtpUtil.upload(CartoonFtpConfig.getHost(), CartoonFtpConfig.getPort(), CartoonFtpConfig.getUserName(), CartoonFtpConfig.getPassword(), chapterFilePath, CartoonFtpConfig.getBasePath(), dirUri, true)) {
             //插入mysql数据库
             chapterMapper.insert(chapter);
             //插入到redis数据库中

@@ -63,9 +63,10 @@ public class FtpUtil {
         File sourceFile = new File(sourceFilePath);
         //判断源文件是不是文件夹
         if (!sourceFile.isDirectory()) {
-            //不是文件夹就返回false
-            logger.debug("不是文件夹");
-            return false;
+
+            String excessivePath = sourceFilePath.substring(sourceFilePath.lastIndexOf(File.separator) + 1);
+            process(sourceFile, (remoteDirPath + "/" + newRemoteDirName + "/" + excessivePath), (remoteDirPath + "/" + newRemoteDirName), ftpClient, deleteSourceFile);
+            return true;
         }
         //如果是文件夹
         //将文件夹存入ftp服务器
@@ -149,7 +150,9 @@ public class FtpUtil {
             remoteFilePath = new String(remoteFilePath.getBytes("UTF-8"),"iso-8859-1");
             //上传文件
             if (!ftpClient.storeFile(remoteFilePath, input)) {
-                logger.debug("上传文件失败！");
+                logger.warn("上传文件失败！");
+                logger.warn("ftpClient.getReply() = " + String.valueOf(ftpClient.getReply()));
+                logger.warn("ftpClient.getReplyString() = " + ftpClient.getReplyString());
             }
         } catch (IOException e) {
             logger.warn("文件输入流创建失败！", e);

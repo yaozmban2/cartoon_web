@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yu.cartoon.cartoon_web.mapper.CartoonTypeRelationMapper">
+    <resultMap id="BaseResultMap" type="cn.yu.cartoon.cartoon_web.pojo.dto.CartoonTypeRelation" >
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="cartoon_id" jdbcType="INTEGER" property="cartoonId" />
+        <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.yu.cartoon.cartoon_web.pojo.dto.CartoonTypeRelation">
+        INSERT INTO cartoon_type_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+              id,
+            </if>
+            <if test="cartoonId != null" >
+              cartoon_id,
+            </if>
+            <if test="typeId != null" >
+              type_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+              #{id},
+            </if>
+            <if test="cartoonId != null" >
+              #{cartoonId},
+            </if>
+            <if test="typeId != null" >
+              #{typeId},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

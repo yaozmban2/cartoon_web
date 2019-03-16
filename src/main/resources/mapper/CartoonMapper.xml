@@ -6,9 +6,80 @@
         <result column="cartoon_name" jdbcType="VARCHAR" property="cartoonName" />
         <result column="cartoon_author" jdbcType="VARCHAR" property="cartoonAuthor" />
         <result column="cartoon_country" jdbcType="TINYINT" property="cartoonCountry" />
-        <result column="cartoon_type" jdbcType="TINYINT" property="cartoonType" />
+        <result column="cartoon_description" jdbcType="VARCHAR" property="cartoonDescription" />
         <result column="cartoon_uri" jdbcType="VARCHAR" property="cartoonUri" />
-        <result column="cartoon_upload_time" jdbcType="TIMESTAMP" property="cartoonUploadTime" />
+        <result column="cartoon_update_time" jdbcType="TIMESTAMP" property="cartoonUpdateTime" />
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+        <result column="collect_count" jdbcType="INTEGER" property="collectCount" />
+        <result column="read_count" jdbcType="INTEGER" property="readCount" />
     </resultMap>
+
+    <insert id="insertAndGetId" useGeneratedKeys="true" keyProperty="cartoonId" parameterType="cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon">
+        INSERT into cartoon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cartoonId != null">
+                cartoon_id,
+            </if>
+            <if test="cartoonName != null">
+                cartoon_name,
+            </if>
+            <if test="cartoonAuthor != null">
+                cartoon_author,
+            </if>
+            <if test="cartoonCountry != null">
+                cartoon_country,
+            </if>
+            <if test="cartoonDescription != null">
+                cartoon_description,
+            </if>
+            <if test="cartoonUri != null">
+                cartoon_uri,
+            </if>
+            <if test="cartoonUpdateTime != null">
+                cartoon_update_time,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="collectCount != null">
+                collect_count,
+            </if>
+            <if test="readCount != null">
+                read_count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cartoonId != null">
+                #{cartoonId},
+            </if>
+            <if test="cartoonName != null">
+                #{cartoonName},
+            </if>
+            <if test="cartoonAuthor != null">
+                #{cartoonAuthor},
+            </if>
+            <if test="cartoonCountry != null">
+                #{cartoonCountry},
+            </if>
+            <if test="cartoonDescription != null">
+                #{cartoonDescription},
+            </if>
+            <if test="cartoonUri != null">
+                #{cartoonUri},
+            </if>
+            <if test="cartoonUpdateTime != null">
+                #{cartoonUpdateTime},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted},
+            </if>
+            <if test="collectCount != null">
+                #{collectCount},
+            </if>
+            <if test="readCount != null">
+                #{readCount},
+            </if>
+        </trim>
+    </insert>
 
 </mapper>

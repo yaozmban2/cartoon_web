@@ -58,18 +58,18 @@
                             </div>
                         </div>
                         <div class="ibox-content">
-                            <form id="formTag" action="itemEdit" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                            <form id="formTag" action="/manager/upload" method="POST" class="form-horizontal" enctype="multipart/form-data">
 
                                 <div class="form-group"><label class="col-sm-2 control-label">漫画id：</label>
                                     <div class="col-sm-10">
-                                        <input id="id" name="id" readonly="readonly" type="text" class="form-control" />
+                                        <input id="id" name="cartoonId" readonly="readonly" type="text" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
 
                                 <div class="form-group"><label class="col-sm-2 control-label">标题：</label>
                                     <div class="col-sm-10">
-                                        <input id="title" name="title" type="text" class="form-control" />
+                                        <input id="title" name="cartoonName" type="text" class="form-control" />
                                     </div>
                                 </div>
 
@@ -77,7 +77,7 @@
 
                                 <div class="form-group"><label class="col-sm-2 control-label">作者：</label>
                                     <div class="col-sm-10">
-                                        <input id="author" name="author" type="text" class="form-control" />
+                                        <input id="author" name="cartoonAuthor" type="text" class="form-control" />
                                     </div>
                                 </div>
 
@@ -85,7 +85,7 @@
 
                                 <div class="form-group"><label class="col-sm-2 control-label">国家：</label>
                                     <div class="col-sm-10">
-                                        <select name="countryId" id="countryId" class="form-control" >
+                                        <select name="cartoonCountry" id="countryId" class="form-control" >
                                             <option value="0">--请选择国家--</option>
                                             <option th:each="country : ${countryList}" th:value="${country.countryId}" th:text="${country.countryName}" th:selected="${countryId==country.countryId}">分类</option>
                                         </select>
@@ -96,12 +96,8 @@
 
                                 <div class="form-group"><label class="col-sm-2 control-label">分类：</label>
                                     <div class="col-sm-10">
-                                        <!--<select name="typeId" id="typeId" class="form-control" >
-                                            <option value="0">&#45;&#45;请选择漫画分类&#45;&#45;</option>
-                                            <option >分类</option>
-                                        </select>-->
                                         <th:block th:each="type: ${typeList}">
-                                            <input type="checkbox"  th:value="${type.typeId}"  th:text="${type.typeName}" />&nbsp;&nbsp;
+                                            <input type="checkbox" name="type[]" th:value="${type.typeId}"  th:text="${type.typeName}" />&nbsp;&nbsp;
                                         </th:block>
                                     </div>
                                 </div>
@@ -117,7 +113,7 @@
 
                                 <div id="imputCell" class="form-group"><label class="col-sm-2 control-label">封面：</label>
                                     <div class="col-sm-10">
-                                        <input id="file" name="file" type="file" />
+                                        <input id="file" name="image" type="file" />
                                     </div>
                                 </div>
 
@@ -125,7 +121,7 @@
 
                                 <div class="form-group"><label class="col-sm-2 control-label">简介：</label>
                                     <div class="col-sm-10">
-                                        <textarea id="sellPoint" name="sellPoint" class="form-control" rows="2"></textarea>
+                                        <textarea id="sellPoint" name="cartoonDescription" class="form-control" rows="2"></textarea>
                                     </div>
                                 </div>
 
@@ -204,18 +200,6 @@
         $("#submitButton").click(function(){
             if($("#title").val() == ""){
                 toastr.error('请输入商品标题','提示');
-                return;
-            }
-            if($("#category").val() == 0){
-                toastr.error('请选择商品分类','提示');
-                return;
-            }
-            if($("#price").val() == 0){
-                toastr.error('请输入商品价格','提示');
-                return;
-            }
-            if($("#num").val() == 0){
-                toastr.error('请输入库存数量','提示');
                 return;
             }
             $("#formTag").submit();
