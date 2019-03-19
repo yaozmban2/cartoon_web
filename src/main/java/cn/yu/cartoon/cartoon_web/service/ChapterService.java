@@ -91,4 +91,22 @@ public interface ChapterService {
      * @param cartoonId 漫画id
      **/
     Integer getChapterCountByCartoonId(Integer cartoonId);
+
+    /**
+     * 根据漫画ID 查询出最新更新的quantity个数据<br/>
+     *      1. 计算出漫画一共会有多少页  count/size + 1<br/>
+     *      2. 判断最后一页能否找到quantity个章节 count % size >= quantity<br/>
+     *      3. 若是能在最后一页找到quantity个 则去redis中最后一页取<br/>
+     *      4.      若redis缓存中没有最后一页的数据，则去数据库中查找到并存入缓存<br/>
+     *      5. 若是不能在最后一页找到quantity个 则分别在最后一页和倒数第二页找到总数为quantity个章节<br/>
+     *
+     * @author Yu
+     * @date 20:24 2019/3/19
+     * @param quantity 要查询的章节数量
+     * @param size 一页的数量
+     * @param chapterCount 章节总数
+     * @param cartoonId 漫画Id
+     * @return List<Chapter>
+     **/
+    List<Chapter> getNewestChapterByCartoonId(Integer cartoonId, Integer size, Integer chapterCount, Integer quantity );
 }

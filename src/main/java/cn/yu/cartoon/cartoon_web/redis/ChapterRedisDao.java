@@ -196,4 +196,39 @@ public class ChapterRedisDao {
 
         return chapterList;
     }
+
+    /**
+     *  根据漫画id从分页的缓存数据中找到最新的quantity个章节<br/>
+     *      1.生成key去缓存中找到List数据<br/>
+     *      2.从后往前遍历出quantity个数据<br/>
+     *      3.使用jackson将存储的章节信息json串反序列化为对象<br/>
+     *      key: chaptersByCartoonId:#{cartoonId}:#{page}:#{size}
+     *
+     * @author Yu
+     * @date 18:06 2019/3/16
+     * @param cartoonId 漫画章节
+     * @param page 第几分页
+     * @param size 分页大小
+     * @param quantity 要查询的章节数量
+     * @return 如果找不到数据 则返回null
+     **/
+    public List<Chapter> selectNewestChapterByCartoonId(Integer cartoonId,Integer page, Integer size, Integer quantity) {
+
+        String key = "chaptersByCartoonId:{0}:{1}:{2}";
+        key = MessageFormat.format(key, String.valueOf(cartoonId), String.valueOf(page), String.valueOf(size));
+
+        List<String> chapterStrList = new ArrayList<>();
+        for (int i = 0; i < quantity; i++) {
+            chapterStrList.add(redisTemplate.opsForList().index(key, -1 - i));
+        }
+        if (0 == chapterStrList.size()) {
+            return null;
+        }
+        List<Chapter> chapterList = new ArrayList<>();
+        for (String chapterStr:chapterStrList) {
+            chapterList.add(JacksonUtil.readValue(chapterStr, Chapter.class));
+        }
+
+        return chapterList;
+    }
 }

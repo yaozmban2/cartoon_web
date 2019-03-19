@@ -732,3 +732,16 @@ li.detail-list-comment-sublist-more{padding: 4px 0;background: #EBEBEB;}
 .guide{position: absolute;height: 100%;width: 100%;z-index: 999;overflow: hidden;top: 0;left: 0;}
 .guide img{width: 100%;}
 .guide a{position: absolute;margin-top: 110%;display: block;width: 50%;left: 25%;padding-top: 13%;top: 0;}
+
+.listpage{margin: 10px;height: 36px;line-height: 36px;overflow: hidden;}
+.listpage span{height: 36px;line-height: 36px;text-align: center;}
+.listpage .left{float: left;width: 25%;}
+.listpage a{float: left;}
+.listpage .left a {float: left;}
+.listpage .left a, .listpage .right a {display: inline-block;height: 36px;width: 90%;}
+.listpage .before{background: #cecece;color: #FFF;}
+.listpage .middle {width: 49%;border: 1px solid #dfdfdf;height: 34px;display: block;float: left;border-radius: 5px;}
+.listpage .middle select {border: none;color: #999;display: inline-block;float: left;font-style: normal;height: 34px;line-height: 34px;text-align: center;width: 100%;}
+.listpage .right {float: right;width: 25%;}
+.listpage .right a {float: right;}
+.listpage .onclick {background: #1ABC9C;color: #FFF;}

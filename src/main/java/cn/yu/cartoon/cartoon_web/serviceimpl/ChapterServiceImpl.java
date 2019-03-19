@@ -2,6 +2,7 @@ package cn.yu.cartoon.cartoon_web.serviceimpl;
 
 import cn.yu.cartoon.cartoon_web.config.CartoonFtpConfig;
 import cn.yu.cartoon.cartoon_web.mapper.ChapterMapper;
+import cn.yu.cartoon.cartoon_web.pojo.dto.Cartoon;
 import cn.yu.cartoon.cartoon_web.pojo.dto.Chapter;
 import cn.yu.cartoon.cartoon_web.redis.ChapterRedisDao;
 import cn.yu.cartoon.cartoon_web.service.ChapterService;
@@ -126,23 +127,83 @@ public class ChapterServiceImpl implements ChapterService {
             return chapterList;
         }
 
-        Map<String, Object> map = new HashMap<>(3);
-        map.put("cartoonId", cartoonId);
-        map.put("index", (page - 1) * size);
-        map.put("size", size);
-        chapterList = chapterMapper.selectChaptersByCartoonIdByPage(map);
-
-        if (0 == chapterList.size()) {
-            return null;
-        }
-        chapterRedisDao.insertChaptersByCartoonId(cartoonId, chapterList, page, size);
-
-        return chapterList;
+        return selectChaptersByCartoonIdByPageThenInsertIntoRedis(cartoonId, page, size);
     }
 
     @Override
     public Integer getChapterCountByCartoonId(Integer cartoonId) {
         return chapterMapper.selectChapterCountByCartoonId(cartoonId);
+    }
+
+    @Override
+    public List<Chapter> getNewestChapterByCartoonId(Integer cartoonId, Integer size, Integer chapterCount, Integer quantity) {
+
+        Integer pageCount = chapterCount / size + 1;
+        if (chapterCount % size >= quantity) {
+            List<Chapter> newChapterList = chapterRedisDao.selectNewestChapterByCartoonId(cartoonId, pageCount, size, quantity);
+            if (null == newChapterList) {
+                newChapterList = new ArrayList<>();
+                selectNewChaptersWhenNotInRedis(cartoonId, pageCount, size, quantity, newChapterList);
+            }
+            return newChapterList;
+        } else {
+            List<Chapter> newChapterList = chapterRedisDao.selectNewestChapterByCartoonId(cartoonId, pageCount, size, chapterCount % size);
+            if (null == newChapterList) {
+                newChapterList = new ArrayList<>();
+                selectNewChaptersWhenNotInRedis(cartoonId, pageCount, size, chapterCount % size, newChapterList);
+            }
+
+            List<Chapter> chapterList = chapterRedisDao.selectNewestChapterByCartoonId(cartoonId, pageCount - 1, size, quantity - chapterCount % size);
+            if (null == chapterList) {
+                selectNewChaptersWhenNotInRedis(cartoonId, pageCount - 1, size, quantity - chapterCount % size, newChapterList);
+            } else {
+                newChapterList.addAll(chapterList);
+            }
+            return newChapterList;
+
+        }
+    }
+
+    /**
+     * 根据漫画id和页数从数据库中找到相应的数据并存入redis缓存中
+     *
+     * @author Yu
+     * @date 21:06 2019/3/19
+     * @param cartoonId 漫画id
+     * @param page 漫画页数
+     * @param size 一页的数量
+     * @return List<Chapter> 如果没有找到数据返回Null
+     **/
+    private List<Chapter> selectChaptersByCartoonIdByPageThenInsertIntoRedis(Integer cartoonId, Integer page, Integer size) {
+
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("cartoonId", cartoonId);
+        map.put("index", (page - 1) * size);
+        map.put("size", size);
+        List<Chapter> chapterList =  chapterMapper.selectChaptersByCartoonIdByPage(map);
+        if (0 == chapterList.size()) {
+            return null;
+        }
+        chapterRedisDao.insertChaptersByCartoonId(cartoonId, chapterList, page, size);
+        return chapterList;
+    }
+
+    /**
+     *  查询某章节分页最新的quantity个数据，并且这些数据不在redis中的情况
+     *
+     * @author Yu
+     * @date 21:29 2019/3/19
+     * @param
+     * @return
+     **/
+    private void selectNewChaptersWhenNotInRedis(Integer cartoonId, Integer page, Integer size, Integer quantity, List<Chapter> newChapterList) {
+
+        List<Chapter> chapterList = selectChaptersByCartoonIdByPageThenInsertIntoRedis(cartoonId, page, size);
+        if (null != chapterList) {
+            for (int i = 0; i < quantity; i ++ ) {
+                newChapterList.add(chapterList.get(chapterList.size() - 1 - i));
+            }
+        }
     }
 
 }

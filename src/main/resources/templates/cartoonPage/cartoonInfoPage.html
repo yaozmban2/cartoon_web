@@ -82,28 +82,68 @@
     </div>-->
     <div id="tempc">
       <div class="detail-selector item-2">
-        <a class="detail-selector-item active" href="javascript:void(0);" onclick="titleSelect(this, 'detail-list-select', 'detail-list-select-1');">连载</a>
+        <!--href="javascript:void(0);" onclick="titleSelect(this, 'detail-list-select', 'detail-list-select-1');"-->
+        <a class="detail-selector-item active" >连载</a>
       </div>
-      <div class="detail-list-title">
-        <span class="detail-list-title-1">连载中</span>
-        <a href="/ch21_3-790271/" class="detail-list-title-2">第21.3话</a>
-        <span class="detail-list-title-3">03月11号</span>
-        <a href="javascript:void(0);" onclick="sortBtnClick(this);" class="detail-list-title-right sort-2">倒序</a></div>
+
+      <ul class="detail-list-1 detail-list-select">
+        <th:block th:each="chapter: ${newChapterList}">
+          <li style=" display : inline; float: none">
+            <a  class="chapteritem" style="text-align: left">
+              <div class="detail-list-2-cover">
+                <img class="detail-list-2-cover-img" th:src="@{/img/a1.jpg}" />
+              </div>
+              <div class="detail-list-2-info" style="line-height: normal; margin: 0 0 0 10%;">
+                <img class="detail-list-2-cover-img" th:src="@{/img/mobile/new.png}" style="width: 80px;height: 60px; float: right" />
+                <p class="detail-list-2-info-title" th:text="'第' + ${chapter.sortNum} + '话：' + ${chapter.chapterName}"></p>
+                <p class="detail-list-2-info-subtitle" th:text="${#dates.format(chapter.chapterUpdateTime, 'yyyy-MM-dd')}">2017-4-09</p>
+              </div>
+            </a>
+          </li>
+        </th:block>
+      </ul>
+
+      <div style="width: 100%; height: 40px; background-color: white"></div>
+
       <ul class="detail-list-1 detail-list-select" id="detail-list-select-1">
         <th:block th:each="chapter: ${chapterList}">
           <li style=" display : inline; float: none">
             <a  class="chapteritem" style="text-align: left">
-              <img style="width: 15%;" th:src="@{/img/a1.jpg}" />
-              <p th:text="${chapter.chapterName}" style="display: inline"></p>
+              <div class="detail-list-2-cover">
+                <img class="detail-list-2-cover-img" th:src="@{/img/a1.jpg}" />
+              </div>
+              <div class="detail-list-2-info" style="line-height: normal; margin: 0 0 0 10%;">
+                <p class="detail-list-2-info-title" th:text="'第' + ${chapter.sortNum} + '话：' + ${chapter.chapterName}"></p>
+                <p class="detail-list-2-info-subtitle" th:text="${#dates.format(chapter.chapterUpdateTime, 'yyyy-MM-dd')}">2017-4-09</p>
+              </div>
             </a>
           </li>
         </th:block>
-
-        <li style="display:none;">
-          <a href="/ch1_1-525328/" title="最强贤者、转生" class="chapteritem">第1.1话</a></li>
       </ul>
-      <a class="detail-list-more" href="javascript:void(0);" style="display: block;">展开全部章节</a>
     </div>
+    <div class="listpage">
+      <span class="left">
+        <a class="before">上一页</a>
+      </span>
+      <span class="middle">
+        <select name="pageselect" onchange="" >
+          <option value="" selected="selected">第 1 - 10 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+          <option value="" selected="">第 11 - 20 话</option>
+        </select>
+      </span>
+      <span class="right">
+        <a class="onclick">下一页</a>
+      </span>
+    </div>
+
     <a class="detail-bootom-ad-con" style="display:none;" href="javascript:window.location.href = 'manhuaren://start';setTimeout(function () {window.location.href = '/download/';}, 500);">
       <img class="detail-bootom-ad" src="http://css99tel.cdndm5.com/v201903121809/blue/images/mobile/detail-bootom-ad.png" />
     </a>

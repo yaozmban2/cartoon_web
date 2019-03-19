@@ -1,5 +1,6 @@
 package cn.yu.cartoon.cartoon_web.ServiceTest;
 
+import cn.yu.cartoon.cartoon_web.pojo.dto.Chapter;
 import cn.yu.cartoon.cartoon_web.service.ChapterService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,13 @@ public class ChapterServiceTest {
         } else {
             System.out.println(list);
         }
+    }
+
+    @Test
+    public void getNewestChapterByCartoonIdTest() {
+        List<Chapter> newestChapterByCartoonId = chapterService.getNewestChapterByCartoonId(6, 10, 11, 2);
+        System.out.println(newestChapterByCartoonId);
+
     }
 
 }

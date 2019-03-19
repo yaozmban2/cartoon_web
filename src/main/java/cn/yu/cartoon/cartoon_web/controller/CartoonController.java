@@ -105,6 +105,7 @@ public class CartoonController {
     public String getCartoonInfoPage(@PathVariable Integer cartoonId, @PathVariable Integer page, Model model) {
 
         Integer pageSize = 10;
+        Integer newChapterQuantity = 2;
         int abbreviationLength = 80;
 
         if (null == cartoonId) {
@@ -118,15 +119,16 @@ public class CartoonController {
         Integer pageCount = ( cartoonInfoVo.getChapterCount() / pageSize ) + 1;
         List<Chapter> chapterList = chapterService.getChaptersByCartoonIdByPage(cartoonId, page, pageSize);
 
+        List<Chapter> newChapterList = chapterService.getNewestChapterByCartoonId(cartoonId, pageSize, cartoonInfoVo.getChapterCount(), newChapterQuantity);
+
         model.addAttribute("cartoon", cartoonInfoVo);
         model.addAttribute("pageCount", pageCount);
         model.addAttribute("chapterList", chapterList);
+        model.addAttribute("newChapterList", newChapterList);
 
         if (cartoonInfoVo.getCartoonDescription().length() > abbreviationLength) {
             model.addAttribute("abbreviation", cartoonInfoVo.getCartoonDescription().substring(0, abbreviationLength - 1) + " ...");
         }
-
-
 
         return "/cartoonPage/cartoonInfoPage";
     }
