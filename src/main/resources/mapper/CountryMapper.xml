@@ -11,7 +11,7 @@
         SELECT * from country;
     </select>
 
-    <select id="selectById" parameterType="Integer" resultMap="BaseResultMap">
+    <select id="selectByCountryId" parameterType="Integer" resultMap="BaseResultMap">
         SELECT * from country where country_id = #{countryId}
     </select>
 

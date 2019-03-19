@@ -54,14 +54,18 @@ public class CartoonRedisDao {
      * @author Yu
      * @date 14:06 2019/3/16
      * @param cartoonId 漫画id
-     * @return CartoonInfoVo 继承自cartoon类 增加了一个countryName的属性
+     * @return 如果没有数据返回null
      **/
     public CartoonInfoVo selectByCartoonId(Integer cartoonId) {
 
         String key = "cartoon:{0}";
         key = MessageFormat.format(key, String.valueOf(cartoonId / 512));
         String hkey = String.valueOf(cartoonId % 512);
-        return restoreCartoonFromHashStore((String) redisTemplate.opsForHash().get(key, hkey));
+        Object o = redisTemplate.opsForHash().get(key, hkey);
+        if (null == o) {
+            return null;
+        }
+        return restoreCartoonFromHashStore((String) o);
 
     }
 
@@ -94,6 +98,7 @@ public class CartoonRedisDao {
         cartoonInfoVo.setReadCount(Integer.valueOf(cartoonInfoList[9]));
         cartoonInfoVo.setIsEnd(Byte.valueOf(cartoonInfoList[10]));
         cartoonInfoVo.setIsAdult(Byte.valueOf(cartoonInfoList[11]));
+        cartoonInfoVo.setChapterCount(Integer.valueOf(cartoonInfoList[12]));
 
         return cartoonInfoVo;
 
@@ -125,7 +130,8 @@ public class CartoonRedisDao {
                 cartoonInfoVo.getCollectCount().toString() + "|" +
                 cartoonInfoVo.getReadCount().toString() + "|" +
                 cartoonInfoVo.getIsEnd().toString() + "|" +
-                cartoonInfoVo.getIsAdult().toString();
+                cartoonInfoVo.getIsAdult().toString() + "|" +
+                cartoonInfoVo.getChapterCount().toString();
         return cartoonInfoStr;
     }
 }

@@ -105,6 +105,7 @@ public class CartoonController {
     public String getCartoonInfoPage(@PathVariable Integer cartoonId, @PathVariable Integer page, Model model) {
 
         Integer pageSize = 10;
+        int abbreviationLength = 80;
 
         if (null == cartoonId) {
             return "404";
@@ -120,6 +121,12 @@ public class CartoonController {
         model.addAttribute("cartoon", cartoonInfoVo);
         model.addAttribute("pageCount", pageCount);
         model.addAttribute("chapterList", chapterList);
+
+        if (cartoonInfoVo.getCartoonDescription().length() > abbreviationLength) {
+            model.addAttribute("abbreviation", cartoonInfoVo.getCartoonDescription().substring(0, abbreviationLength - 1) + " ...");
+        }
+
+
 
         return "/cartoonPage/cartoonInfoPage";
     }

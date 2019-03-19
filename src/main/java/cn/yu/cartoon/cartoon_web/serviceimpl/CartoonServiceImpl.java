@@ -91,6 +91,7 @@ class CartoonServiceImpl implements CartoonService {
         if (null != cartoonInfoVo && null != cartoonInfoVo.getCartoonId()) {
             return cartoonInfoVo;
         }
+        cartoonInfoVo = new CartoonInfoVo();
 
         Cartoon cartoon = cartoonMapper.selectById(cartoonId);
         if (null == cartoon) {
@@ -98,7 +99,6 @@ class CartoonServiceImpl implements CartoonService {
         }
 
         Country country = countryMapper.selectByCountryId(Integer.valueOf(cartoon.getCartoonCountry()));
-        assert cartoonInfoVo != null;
         cartoonInfoVo.setCountryName(country.getCountryName());
 
         Integer chapterCount = chapterMapper.selectChapterCountByCartoonId(cartoonId);
